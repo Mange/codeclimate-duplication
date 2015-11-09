@@ -58,6 +58,14 @@ RSpec.describe CC::Engine::Analyzers::Javascript::Main do
       expect(run_engine(engine_conf)).to be_empty
   end
 
+  it "does not report a snippet as a duplicate of itself" do
+    create_source_file("dup.jsx", <<-EOJSX)
+          <a className='button button-primary full' href='#' onClick={this.onSubmit.bind(this)}>Login</a>
+    EOJSX
+
+    expect(run_engine(engine_conf)).to be_empty
+  end
+
   def create_source_file(path, content)
     File.write(File.join(@code, path), content)
   end
